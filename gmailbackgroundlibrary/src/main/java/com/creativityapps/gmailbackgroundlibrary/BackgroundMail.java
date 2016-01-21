@@ -34,6 +34,26 @@ public class BackgroundMail {
         this.sendingMessageError=context.getString(R.string.msg_error_sending_email);
     }
 
+    /**
+     * callback関数の定義。ここから。
+     */
+
+    public interface BackgroundMailCallbacks {
+        public void callback(boolean success);
+    }
+
+    private BackgroundMailCallbacks _backgroundMailCallbacks;
+
+    public void setCallbacks(BackgroundMailCallbacks backgroundMailCallbacks) {
+        _backgroundMailCallbacks = backgroundMailCallbacks;
+    }
+
+    /**
+     * callback関数の定義。ここまで。
+     */
+
+
+
     public void setGmailUserName(String string) {
         this.username = string;
     }
@@ -134,8 +154,10 @@ public class BackgroundMail {
                 if (result) {
                     Toast.makeText(mContext, sendingMessageSuccess,
                             Toast.LENGTH_SHORT).show();
+                    _backgroundMailCallbacks.callback(result);
                 }else {
                     Toast.makeText(mContext, sendingMessageError, Toast.LENGTH_SHORT).show();
+                    _backgroundMailCallbacks.callback(result);
                 }
             }
         }
